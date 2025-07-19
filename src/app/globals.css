@@ -1,0 +1,172 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 16, 24, 40;
+  --background-end-rgb: 11, 17, 31;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    )
+    fixed;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .hover-float {
+    transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform;
+  }
+
+  .hover-float:hover {
+    transform: translateY(-8px);
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientPosition 3s ease infinite;
+  }
+
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+
+  .bg-grid-pattern {
+    background-image: linear-gradient(to right, #233554 1px, transparent 1px),
+      linear-gradient(to bottom, #233554 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .text-gradient {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-[#00E5A1] to-[#4079ff];
+  }
+
+  .glow-teal {
+    box-shadow: 0 0 10px 2px rgba(0, 229, 161, 0.3);
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 10px 2px rgba(64, 121, 255, 0.3);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #00e5a1 transparent; /* Firefox */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 1px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #00e5a1;
+    border-radius: 6px;
+  }
+  .scrollbar-no-buttons::-webkit-scrollbar-button {
+    display: none; /* ❌ Ẩn mũi tên lên/xuống */
+    height: 0;
+    width: 0;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes gradientPosition {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Extend the marquee with duplicated content */
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.animate-marquee > * {
+  display: inline-block;
+}
+
+.animate-marquee::after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+}
