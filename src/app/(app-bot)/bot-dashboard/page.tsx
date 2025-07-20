@@ -198,13 +198,7 @@ export default function Dashboard() {
 
   return (
     <div
-      className="w-full p-6 space-y-6 bg-[#020617]"
-      style={{
-        backgroundImage: `
-      radial-gradient(circle at 20% 30%, #00e5a105 0%, transparent 40%),
-      radial-gradient(circle at 80% 70%, #00e5a103 0%, transparent 40%),
-      linear-gradient(135deg, #020617 0%, #0f172a 25%, #1e293b 50%, #0f172a 75%, #020617 100%)`,
-      }}
+      className="w-full p-6 space-y-6"
     >
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
         <div>

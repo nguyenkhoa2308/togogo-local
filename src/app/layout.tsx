@@ -27,7 +27,7 @@ export default function RootLayout({
   const isBotDashboardPage = pathname.startsWith("/bot-dashboard");
 
   return (
-    <html lang="vi" className="custom-scrollbar">
+    <html lang="vi" className="scrollbar-hide">
       <body className={inter.className}>
         <AOSProvider>
           {!isBlogPage && !isBotDashboardPage && <Header />}

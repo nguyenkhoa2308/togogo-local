@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
-import { SideBar } from "@/app/(app-bot)/bot-dashboard/bot-management/layouts/SideBar";
+import { SideBar } from "@/app/(app-bot)/bot-dashboard/layouts/SideBar";
 import { usePathname } from "next/navigation";
-import { Header } from "./bot-dashboard/bot-management/layouts/Header";
+import { Header } from "@/app/(app-bot)/bot-dashboard/layouts/Header";
 // import Dashboard from "./bot-dashboard/page";
 // import BotManagement from "./bot-dashboard/bot-management/page";
 // import StrategiesPage from "./bot-dashboard/strategies/page";
@@ -101,7 +101,7 @@ export default function BotDashboardLayout({
             ? `fixed z-50 transition-transform duration-300 ${
                 sidebarOpen ? "translate-x-0" : "-translate-x-full"
               }`
-            : "relative"
+            : "relative z-50"
         }`}
       >
         <SideBar activeTab={activeTab} onTabChange={setActiveTab} />
@@ -117,10 +117,19 @@ export default function BotDashboardLayout({
 
         {/* <main className="flex-1 overflow-auto">{renderContent()}</main> */}
         {/* <main className="flex-1 overflow-auto">{children}</main> */}
-        <main className="layout-main overflow-hidden">
-          <div className="h-full overflow-y-auto pattern-overlay">
-            <div className="min-h-full">{children}</div>
-          </div>
+        <main className="relative min-h-screen overflow-hidden">
+          <div
+            className="fixed inset-0 z-0 pointer-events-none"
+            style={{
+              backgroundImage: `radial-gradient(circle at 20% 30%, #00e5a105 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, #00e5a103 0%, transparent 40%),
+                        linear-gradient(135deg, #020617 0%, #0f172a 25%, #1e293b 50%, #0f172a 75%, #020617 100%)`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "top",
+            }}
+          />
+          <div className="relative z-10">{children}</div>
         </main>
       </div>
     </section>
