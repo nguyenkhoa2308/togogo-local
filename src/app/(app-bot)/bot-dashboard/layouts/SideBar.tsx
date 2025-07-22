@@ -77,7 +77,7 @@ export function SideBar({ activeTab, onTabChange }: SidebarProps) {
 
   return (
     <div
-      className={`bg-[#1a2332] border-r border-slate-700/50 transition-all duration-300 no-scrollbar ${
+      className={`bg-[#0f172a] border-r border-slate-700/50 transition-all duration-300 no-scrollbar ${
         isCollapsed ? "w-16" : "w-64"
       } flex flex-col h-screen sticky top-0`}
     >
@@ -122,7 +122,7 @@ export function SideBar({ activeTab, onTabChange }: SidebarProps) {
               onClick={() => onTabChange(item.id)}
               className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors group ${
                 activeTab === item.id
-                  ? "bg-gray-700 border-r-2 border-green-500"
+                  ? "bg-gray-700 border-r-2 border-[#00e5a1]"
                   : ""
               } hover:bg-gray-700`}
             >

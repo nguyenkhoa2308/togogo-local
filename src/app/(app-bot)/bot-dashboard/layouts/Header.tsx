@@ -68,7 +68,7 @@ export function Header({
     : [];
 
   return (
-    <header className="bg-gray-900 border-b border-gray-700 relative z-30">
+    <header className="bg-gray-900 border-b border-gray-700 relative z-2">
       <div className="h-17 px-4 lg:px-6 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           {isMobile && (
@@ -256,10 +256,10 @@ export function Header({
           </div>
 
           {!isMobile && (
-            <div className="hidden lg:flex items-center space-x-3 px-4 py-2 bg-blue-900 border border-blue-600 rounded-lg">
+            <div className="hidden lg:flex items-center space-x-3 px-4 py-2 bg-[#00e5a1]/20 border border-[#00e5a1] rounded-lg">
               <div className="text-right">
                 <div className="text-xs text-gray-400">Số dư khả dụng</div>
-                <div className="text-sm font-semibold text-blue-400">
+                <div className="text-sm font-semibold text-[#00e5a1]">
                   ₫261.1M
                 </div>
               </div>

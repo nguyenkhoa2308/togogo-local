@@ -101,7 +101,7 @@ export default function BotDashboardLayout({
             ? `fixed z-50 transition-transform duration-300 ${
                 sidebarOpen ? "translate-x-0" : "-translate-x-full"
               }`
-            : "relative z-50"
+            : "relative z-1"
         }`}
       >
         <SideBar activeTab={activeTab} onTabChange={setActiveTab} />

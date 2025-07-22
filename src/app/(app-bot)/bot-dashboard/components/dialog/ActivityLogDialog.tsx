@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   //   Clock,
   User,
@@ -17,6 +17,8 @@ import {
   Eye,
   Download,
   X,
+  CheckIcon,
+  ChevronDown,
 } from "lucide-react";
 
 interface ActivityLogDialogProps {
@@ -27,6 +29,7 @@ interface ActivityLogDialogProps {
 export function ActivityLogDialog({ isOpen, onClose }: ActivityLogDialogProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterModule, setFilterModule] = useState("all");
+  const [filterDropdown, setFilterDropdown] = useState(false);
 
   const allActivities = [
     {
@@ -231,12 +234,19 @@ export function ActivityLogDialog({ isOpen, onClose }: ActivityLogDialogProps) {
     },
   ];
 
+  const filterOptions = [
+    { value: "all", label: "Tất cả" },
+    { value: "auth", label: "Xác thực" },
+    { value: "payment", label: "Thanh toán" },
+    { value: "bot", label: "Bot" },
+  ];
+
   const filteredActivities = allActivities.filter((activity) => {
     const matchesSearch =
       activity.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
       activity.target.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesModule =
-      filterModule === "all" || activity.module === filterModule;
+      filterModule === "all" || activity.module.toLowerCase() === filterModule;
     return matchesSearch && matchesModule;
   });
 
@@ -283,98 +293,173 @@ export function ActivityLogDialog({ isOpen, onClose }: ActivityLogDialogProps) {
     }
   };
 
+  const handleSeclectFilter = (filter: string) => {
+    setFilterModule(filter);
+    setFilterDropdown(false);
+  };
+
+  const getLabelByValue = (
+    options: { value: string; label: string }[],
+    value: string
+  ): string => {
+    return options.find((opt) => opt.value === value)?.label || value;
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden">
-      <div className="fixed inset-0 z-0 bg-black opacity-70"></div>
-      <div className="bg-white dark:bg-gray-900 w-full max-w-5xl max-h-[90vh] rounded shadow-lg flex flex-col overflow-hidden opacity-100 relative z-50">
+    <div className="fixed inset-0 z-100 flex items-center justify-center overflow-hidden">
+      <div className="fixed inset-0 z-50 bg-black opacity-80"></div>
+      <div className="bg-[#0f172a] p-6 w-full max-w-2xl max-h-[90vh] rounded-xl shadow-lg flex flex-col overflow-hidden border border-[#64ffda14] relative z-50">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-100">
-            Lịch sử hoạt động hệ thống
-          </h2>
-          <button className="text-gray-400 hover:text-white" onClick={onClose}>
-            <X className="w-5 h-5" />
-          </button>
+        <div className="flex flex-col gap-2 text-center sm:text-left border-b border-[#64ffda14] pb-4 flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-semibold text-white text-xl">
+                Lịch sử hoạt động hệ thống
+              </h2>
+              <p className="text-[#94a3b8] text-sm mt-1">
+                Xem chi tiết các hoạt động và thao tác thực hiện trong hệ thống
+                giao dịch
+              </p>
+            </div>
+            <button
+              className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all px-3 h-8 rounded-md hover:bg-[#334155]/20"
+              title="Đóng dialog"
+              onClick={onClose}
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Filters */}
-        <div className="flex items-center gap-4 p-4 border-b border-gray-700">
+        <div className="flex items-center gap-4 py-4 border-b border-[#64ffda14] flex-shrink-0">
           <input
             type="text"
             placeholder="Tìm kiếm hoạt động..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 p-2 rounded bg-gray-800 text-white border border-gray-600"
+            className="flex-1 p-2 text-xs rounded bg-gray-800 text-white border border-gray-600 placeholder:text-[#94a3b8] outline-none focus-visible:border-[#64ffda] focus-visible:ring-[#64ffda80]/50 focus-visible:ring-[3px]"
           />
-          <select
-            value={filterModule}
-            onChange={(e) => setFilterModule(e.target.value)}
-            className="p-2 rounded bg-gray-800 text-white border border-gray-600"
+          <div
+            className="relative"
+            tabIndex={0}
+            onBlur={() => setTimeout(() => setFilterDropdown(false), 100)}
           >
-            <option value="all">Tất cả module</option>
-            <option value="AUTH">Xác thực</option>
-            <option value="PAYMENT">Thanh toán</option>
-            <option value="BOT">Bot</option>
-            {/* Add more options as needed */}
-          </select>
+            <button
+              value={filterModule}
+              onClick={() => setFilterDropdown(!filterDropdown)}
+              className="h-9 w-[150px] flex items-center justify-between rounded-md border border-gray-700 bg-[#1E293B] text-white text-sm px-3"
+            >
+              {getLabelByValue(filterOptions, filterModule)}
+              <ChevronDown
+                className={`w-3 h-3 transition-all ${
+                  filterDropdown ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {filterDropdown && (
+              <div className="absolute z-10 mt-1 w-full bg-[#0F172A] border border-white/10 rounded-md shadow-lg">
+                {filterOptions.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSeclectFilter(option.value)}
+                    className={`block text-xs w-full text-left px-3 py-2 hover:bg-white/10 transition-colors ${
+                      option.value === filterModule ? "bg-white/5" : ""
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-1 text-sm">
+                        {option.label}
+                      </div>
+
+                      {option.value === filterModule ? (
+                        <CheckIcon className="w-4 h-4" />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Activity List */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-2">
-          {filteredActivities.map((activity) => {
-            const Icon = activity.icon;
-            const statusBadge = getStatusBadge(activity.status);
+        <div className="flex-1 overflow-y-auto p-4 space-y-2 scrollbar-hide">
+          {filteredActivities.length === 0 ? (
+            <div className="text-gray-400 text-sm text-center mt-2">
+              Không có hoạt động nào.
+            </div>
+          ) : (
+            filteredActivities.map((activity) => {
+              const Icon = activity.icon;
+              const statusBadge = getStatusBadge(activity.status);
 
-            return (
-              <div
-                key={activity.id}
-                className="flex justify-between items-center p-3 rounded bg-gray-800 border border-gray-700 hover:bg-gray-700"
-              >
-                <div className="flex items-center space-x-4">
-                  <Icon
-                    className={`w-5 h-5 ${getStatusColor(activity.status)}`}
-                  />
-                  <div>
-                    <p className="text-white text-sm font-medium">
-                      {activity.action}
-                    </p>
-                    <p className="text-gray-400 text-xs">{activity.target}</p>
+              return (
+                <div
+                  key={activity.id}
+                  className="flex justify-between items-center p-3 rounded-md border border-[#00e5a114] hover:bg-[#334155]/20"
+                >
+                  <div className="flex items-center space-x-4">
+                    <Icon
+                      className={`w-5 h-5 ${getStatusColor(activity.status)}`}
+                    />
+                    <div>
+                      <p className="text-white text-sm font-medium">
+                        {activity.action}
+                      </p>
+                      <p className="text-gray-400 text-xs">{activity.target}</p>
+                    </div>
+                    <span
+                      className={`ml-2 text-[10px] border rounded px-2 py-1 rounded-lg ${getModuleBadgeColor(
+                        activity.module
+                      )}`}
+                    >
+                      {activity.module}
+                    </span>
                   </div>
-                  <span
-                    className={`ml-2 text-xs border rounded px-2 py-0 ${getModuleBadgeColor(
-                      activity.module
-                    )}`}
-                  >
-                    {activity.module}
-                  </span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <span
-                    className={`text-xs text-white px-2 py-0 rounded ${statusBadge.className}`}
-                  >
-                    {statusBadge.text}
-                  </span>
-                  <div className="text-right">
-                    <p className="text-white text-sm">{activity.time}</p>
-                    <p className="text-gray-400 text-xs">{activity.date}</p>
+                  <div className="flex items-center space-x-3">
+                    <span
+                      className={`text-xs text-white px-2 py-1 rounded-lg ${statusBadge.className}`}
+                    >
+                      {statusBadge.text}
+                    </span>
+                    <div className="text-right">
+                      <p className="text-white text-sm">{activity.time}</p>
+                      <p className="text-gray-400 text-xs">{activity.date}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-700 p-4 text-sm text-gray-400 flex justify-between items-center">
+        <div className="border-t border-[#00e5a114] p-4 text-sm text-gray-400 flex justify-between items-center">
           <span>
             Hiển thị {filteredActivities.length} trong {allActivities.length}{" "}
             hoạt động
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded border border-gray-600 text-white hover:bg-gray-700"
+            className="px-4 py-2 rounded-xl border border-[#64ffda14] text-white bg-[#020617]/80 cursor-pointer hover:bg-[#020617]"
           >
             Đóng
           </button>

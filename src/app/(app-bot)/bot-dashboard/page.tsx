@@ -197,9 +197,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div
-      className="w-full p-6 space-y-6"
-    >
+    <div className="w-full p-6 py-8 space-y-6">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
         <div>
           <h1 className="text-2xl lg:text-3xl text-white font-bold">
@@ -210,7 +208,7 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <button className="px-3 py-2 border  border-[#00E5A1]/50 bg-[#1e293b]/30 text-[#00E5A1] rounded-md hover:bg-[#00e5a1]/10 text-xs flex items-center cursor-pointer">
+          <button className="px-3 py-2 border border-[#00E5A1]/50 bg-[#1e293b]/30 text-[#00E5A1] rounded-md hover:bg-[#00e5a1]/10 text-xs flex items-center cursor-pointer">
             <Download className="w-4 h-4 mr-2" /> Báo cáo
           </button>
           <button className="px-3 py-2 bg-[#00E5A1] text-[#0a1529] rounded-md hover:bg-[#00D194] text-[#0A1529] text-xs flex items-center cursor-pointer">
