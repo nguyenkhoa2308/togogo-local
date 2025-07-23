@@ -24,9 +24,11 @@ import {
   ChevronDown,
   CheckIcon,
   Settings2,
+  XCircle,
 } from "lucide-react";
 
 export default function BotManagement() {
+  // const [botsState, setBotsState] = useState(bots);
   const [selectedBots, setSelectedBots] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -217,9 +219,10 @@ export default function BotManagement() {
     );
   };
 
-  const handleBotAction = (action: string, botName: string) => {
-    setNotification(`${action} bot: ${botName}`);
-    setTimeout(() => setNotification(""), 3000);
+  const handleBotAction = (id: number) => {
+    filteredBots.forEach((bot) =>
+      bot.id === id ? { ...bot, isActive: !bot.isActive } : bot
+    );
   };
 
   const handleCreateBot = () => {
@@ -325,33 +328,30 @@ export default function BotManagement() {
                 </div>
               </div>
             </div>
-            <div className="p-6 border-b border-border">
+            <div className="p-6 border-b border-[#64ffda14]">
               <div className="flex flex-col lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4">
-                <div className="relative flex-1 max-w-md"></div>
-                <div className="relative flex-1 min-w-[150px]">
-                  <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
-                    <Search size={16} className="text-gray-400" />
+                <div className="relative flex-1 max-w-md">
+                  <div className="relative">
+                    <input
+                      placeholder="Tìm kiếm bot..."
+                      className="w-full h-9 pl-10 pr-3 rounded-md bg-[#1E293B] border border-[#64ffda14] text-sm text-white outline-none"
+                    />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                   </div>
-                  <input
-                    type="text"
-                    placeholder="Tìm kiếm..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-8 pr-8 py-2.5 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 text-gray-700 dark:text-gray-200 text-sm"
-                  />
                   {searchTerm && (
                     <button
                       onClick={() => setSearchTerm("")}
                       className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                      title="Xoá chuỗi tìm kiếm"
                     >
                       <XCircle size={16} className="opacity-50" />
                     </button>
                   )}
                 </div>
-                <div className="relative">
+                <div className="relative min-w-[150px]">
                   <button
                     onClick={() => setStatusDropDown(!statusDropdown)}
-                    className="appearance-none outline-none flex justify-between items-center gap-3 w-[300px] bg-[#0F172A] text-white text-sm px-3 py-1.5 rounded-md border border-white/10 transition-colors hover:bg-white/10"
+                    className="appearance-none outline-none flex justify-between items-center gap-3 bg-[#0F172A] w-full text-white text-sm px-3 py-1.5 rounded-md border border-[#64ffda14] transition-colors hover:bg-white/10"
                     title="Chọn trạng thái bot"
                   >
                     <div className="truncate">
@@ -392,11 +392,11 @@ export default function BotManagement() {
                     </div>
                   )}
                 </div>
-                <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-1 flex-wrap">
                   {/* Toggle Advanced Filters Button */}
                   <button
                     // onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                    className="flex-shrink-0 px-3 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg shadow-sm transition-all duration-200 flex items-center gap-1.5"
+                    className="flex-shrink-0 px-3 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg shadow-sm transition-all duration-200 flex items-center gap-1.5 text-sm cursor-pointer"
                   >
                     <Settings2
                       size={16}
@@ -404,9 +404,9 @@ export default function BotManagement() {
                       //   // showAdvancedFilters ? "rotate-180" : ""
                       // } transition-transform duration-200`}
                     />
-                    Bộ lọc nâng cao
+                    Bộ lọc
                     <ChevronDown
-                      size={16}
+                      size={12}
                       // className={`${
                       //   // showAdvancedFilters ? "rotate-180" : ""
                       // } transition-transform duration-200`}
@@ -434,13 +434,46 @@ export default function BotManagement() {
                   {/* Reset Filters Button */}
                   <button
                     // onClick={handleResetFilters}
-                    className="flex-shrink-0 px-3 py-2.5 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white font-medium rounded-lg shadow-sm transition-all duration-200 flex items-center gap-1.5"
+                    className="flex-shrink-0 px-3 py-1.5 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white font-medium rounded-lg shadow-sm transition-all duration-200 flex items-center gap-1.5 text-sm cursor-pointer"
                   >
                     <X size={16} />
                     Reset
                   </button>
                 </div>
               </div>
+              {/* Bulk Actions */}
+              {selectedBots.length > 0 && (
+                <div className="mt-4 p-3 bg-[#334155]/30 rounded-lg border border-[#64ffda0a]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-foreground">
+                      {selectedBots.length} bot đã chọn
+                    </span>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        className="px-3 py-2 bg-[#00E5A1] text-[#0a1529] rounded-md hover:bg-[#00D194] text-[#0A1529] text-xs flex items-center cursor-pointer font-bold"
+                        // onClick={() => handleBulkAction("start")}
+                      >
+                        <Play className="w-4 h-4 mr-1" />
+                        Khởi động
+                      </button>
+                      <button
+                        className="px-3 py-2 bg-orange-600 text-[#0a1529] rounded-md hover:bg-orange-700 text-[#0A1529] text-xs flex items-center cursor-pointer font-bold"
+                        // onClick={() => handleBulkAction("stop")}
+                      >
+                        <Pause className="w-4 h-4 mr-1" />
+                        Tạm dừng
+                      </button>
+                      <button
+                        className="px-3 py-2 bg-[#ef4444]/60 text-white rounded-md hover:bg-[#ef4444]/50 text-[#0A1529] text-xs flex items-center cursor-pointer font-bold"
+                        // onClick={() => handleBulkAction("delete")}
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        Xóa
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="hidden xl:block">
               <table className="w-full">
@@ -451,6 +484,11 @@ export default function BotManagement() {
                         <input
                           type="checkbox"
                           className="peer appearance-none h-4 w-4 rounded border border-[#64ffda14] outline-none bg-[#1e293b] checked:bg-[#00e5a1] checked:border-[#00e5a1] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                          checked={
+                            selectedBots.length === filteredBots.length &&
+                            filteredBots.length > 0
+                          }
+                          onChange={() => handleSelectAll()}
                         />
                         {/* Lucide icon */}
                         <CheckIcon
@@ -488,6 +526,8 @@ export default function BotManagement() {
                           <input
                             type="checkbox"
                             className="peer appearance-none h-4 w-4 rounded border border-[#64ffda14] outline-none bg-[#1e293b] checked:bg-[#00e5a1] checked:border-[#00e5a1] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                            checked={selectedBots.includes(bot.id)}
+                            onChange={() => handleSelectBot(bot.id)}
                           />
                           {/* Lucide icon */}
                           <CheckIcon
@@ -618,7 +658,9 @@ export default function BotManagement() {
                             <button
                               className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all p-2 rounded-md hover:bg-[#334155]/20 cursor-pointer"
                               title="Dừng bot"
-                              // onClick={onClose}
+                              onClick={() => {
+                                handleBotAction(bot.id);
+                              }}
                             >
                               <Pause className="w-5 h-5 text-[#ef4444]" />
                             </button>
@@ -639,6 +681,11 @@ export default function BotManagement() {
                         <input
                           type="checkbox"
                           className="peer appearance-none h-4 w-4 rounded border border-[#64ffda14] outline-none bg-[#1e293b] checked:bg-[#00e5a1] checked:border-[#00e5a1] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                          checked={
+                            selectedBots.length === filteredBots.length &&
+                            filteredBots.length > 0
+                          }
+                          onChange={() => handleSelectAll()}
                         />
                         {/* Lucide icon */}
                         <CheckIcon
@@ -672,6 +719,8 @@ export default function BotManagement() {
                           <input
                             type="checkbox"
                             className="peer appearance-none h-4 w-4 rounded border border-[#64ffda14] outline-none bg-[#1e293b] checked:bg-[#00e5a1] checked:border-[#00e5a1] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                            checked={selectedBots.includes(bot.id)}
+                            onChange={() => handleSelectBot(bot.id)}
                           />
                           {/* Lucide icon */}
                           <CheckIcon
@@ -790,6 +839,8 @@ export default function BotManagement() {
                           <input
                             type="checkbox"
                             className="peer appearance-none h-4 w-4 rounded border border-[#64ffda14] outline-none bg-[#1e293b] checked:bg-[#00e5a1] checked:border-[#00e5a1] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                            checked={selectedBots.includes(bot.id)}
+                            onChange={() => handleSelectBot(bot.id)}
                           />
                           {/* Lucide icon */}
                           <CheckIcon

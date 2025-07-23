@@ -226,7 +226,7 @@ export default function StrategiesPage() {
   }, [activeTab]);
 
   return (
-    <main className="flex-1 container px-6 pt-8 pb-8 relative z-10">
+    <main className="flex-1 px-6 pt-8 pb-8 relative z-10">
       {/* Dashboard Title */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-white">Backtest Dashboard</h1>

@@ -4,18 +4,11 @@ import {
   Star,
   ThumbsUp,
   ThumbsDown,
-  Search,
   Users,
   Eye,
-  ChevronUp,
   ChevronDown,
   Flag,
   Share2,
-  TrendingUp,
-  MessageSquare,
-  Award,
-  Calendar,
-  BookOpen,
   BookText,
   Activity,
   Grid3x3,
@@ -23,6 +16,7 @@ import {
   FilePenLine,
   CheckIcon,
   LucideIcon,
+  Search,
 } from "lucide-react";
 
 type Bot = {
@@ -79,8 +73,6 @@ export default function BotReviewsTab() {
   );
   const [tab, setTab] = useState<"myreviews" | "community">("myreviews");
   const [usedBotViewMode, setUsedBotViewMode] = useState<ViewMode>("list");
-
-  //   const card
 
   const userBotMetrics = [
     {
@@ -336,6 +328,30 @@ export default function BotReviewsTab() {
       comment:
         "Mới test nhưng khá ổn, entry timing tốt. Mới test nhưng khá ổn, entry timing tốt. Mới test nhưng khá ổn, entry timing tốt. Mới test nhưng khá ổn, entry timing tốt. ",
     },
+    {
+      name: "SWING-TRADER-PRO",
+      status: "Đang test",
+      author: "SwingMaster",
+      period: "2024-12-01  • 2 tuần",
+      pnl: "+450.000 ₫",
+      pnlPercent: "+4.5%",
+      trades: 23,
+      winRate: "78.3%",
+      rating: 0,
+    },
+    {
+      name: "BREAKOUT-HUNTER",
+      status: "Đang dùng",
+      author: "BreakoutPro",
+      period: "2024-11-01  • 1.5 tháng",
+      pnl: "+890.000 ₫",
+      pnlPercent: "+5.9%",
+      trades: 45,
+      winRate: "82.2%",
+      rating: 4,
+      comment:
+        "Mới test nhưng khá ổn, entry timing tốt. Mới test nhưng khá ổn, entry timing tốt. Mới test nhưng khá ổn, entry timing tốt. Mới test nhưng khá ổn, entry timing tốt. ",
+    },
   ];
 
   const botViewModes: { key: ViewMode; icon: LucideIcon; title: string }[] = [
@@ -514,18 +530,9 @@ export default function BotReviewsTab() {
                 <div className="relative">
                   <input
                     placeholder="Tìm kiếm bot..."
-                    className="w-full h-9 pl-10 pr-3 rounded-md bg-[#1E293B] border border-gray-700 text-sm text-white"
+                    className="w-full h-9 pl-10 pr-3 rounded-md bg-[#1E293B] border border-gray-700 text-sm text-white outline-none"
                   />
-                  <svg
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.35-4.35" />
-                  </svg>
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                 </div>
                 <div
                   className="relative"
@@ -627,7 +634,7 @@ export default function BotReviewsTab() {
               <div
                 className={`${
                   usedBotViewMode === "grid"
-                    ? "grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 space-y-0"
+                    ? "grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4 space-y-0"
                     : ""
                 } space-y-4`}
               >
@@ -639,7 +646,9 @@ export default function BotReviewsTab() {
                     <div className="flex justify-between mb-3">
                       <div>
                         <div className="flex items-center space-x-2">
-                          <h4 className="text-white font-medium">{bot.name}</h4>
+                          <h4 className="text-white font-medium sm:text-sm xl:text-[16px]">
+                            {bot.name}
+                          </h4>
                           <span
                             className={`text-xs px-2 py-0.5 rounded-md border ${
                               bot.status === "Đang dùng"

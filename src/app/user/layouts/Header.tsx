@@ -68,7 +68,7 @@ export function Header({
     : [];
 
   return (
-    <header className="bg-gray-900 border-b border-gray-700 relative z-2">
+    <header className="bg-gray-900 border-b border-gray-700 relative z-1">
       <div className="h-17 px-4 lg:px-6 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           {isMobile && (
@@ -218,8 +218,8 @@ export function Header({
                 </>
               )}
             </button>
-            <div className="absolute right-0 w-full h-4 top-full"> </div>
-            <div className="absolute right-0 mt-2 w-56 bg-gray-800 border border-gray-600 rounded-lg shadow-xl hidden group-hover:block z-50">
+            <div className="absolute right-0 w-full h-4 top-full"></div>
+            <div className="absolute right-0 mt-2 w-56 bg-gray-800 border border-gray-600 rounded-lg shadow-xl hidden group-hover:block z-[100]">
               <div className="p-3 border-b border-gray-600">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">

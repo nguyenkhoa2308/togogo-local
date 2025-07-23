@@ -44,7 +44,7 @@ export default function Dashboard() {
       desc: "Tháng này",
     },
     {
-      title: "Bot Active",
+      title: "Số Bot Hoạt Động",
       value: "5",
       change: "+3",
       trend: "up",
@@ -53,7 +53,7 @@ export default function Dashboard() {
       desc: "Đang chạy",
     },
     {
-      title: "Win Rate",
+      title: "Tỉ Lệ Thắng",
       value: "78.5%",
       change: "+7%",
       trend: "up",

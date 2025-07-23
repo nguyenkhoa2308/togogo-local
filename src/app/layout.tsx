@@ -24,15 +24,15 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const isBlogPage = pathname.startsWith("/blog");
-  const isBotDashboardPage = pathname.startsWith("/bot-dashboard");
+  const isUserPage = pathname.startsWith("/user");
 
   return (
     <html lang="vi" className="scrollbar-hide">
       <body className={inter.className}>
         <AOSProvider>
-          {!isBlogPage && !isBotDashboardPage && <Header />}
+          {!isBlogPage && !isUserPage && <Header />}
           <main className="min-h-screen">{children}</main>
-          {!isBlogPage && !isBotDashboardPage && <Footer />}
+          {!isBlogPage && !isUserPage && <Footer />}
           <ScrollToTopButton />
         </AOSProvider>
       </body>

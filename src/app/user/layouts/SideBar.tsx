@@ -117,7 +117,7 @@ export function SideBar({ activeTab, onTabChange }: SidebarProps) {
         <nav className="space-y-1 px-2">
           {menuItems.map((item) => (
             <Link
-              href={`/bot-dashboard/${item.id === "dashboard" ? "" : item.id}`}
+              href={`/user/${item.id}`}
               key={item.id}
               onClick={() => onTabChange(item.id)}
               className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors group ${
@@ -141,11 +141,32 @@ export function SideBar({ activeTab, onTabChange }: SidebarProps) {
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-slate-700/50">
+      <div className="p-4 border-t border-[#64ffda14]">
         {!isCollapsed && (
-          <div className="text-center">
-            <div className="text-xs text-gray-400 mb-1">Phiên bản</div>
-            <div className="text-sm text-white font-medium">v2.1.0</div>
+          <div className="bg-[#0f172a] rounded-lg p-3">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-[#00e5a1] rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-black font-bold text-xs">T</span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-medium text-sidebar-accent-foreground truncate">
+                  Trader Nam
+                </div>
+                <div className="text-xs text-[#94a3b8] truncate">
+                  Premium Account
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+              <div className="text-center p-2 bg-background/10 rounded">
+                <div className="text-[#00e5a1] font-semibold">78.5%</div>
+                <div className="text-[#94a3b8]">Win Rate</div>
+              </div>
+              <div className="text-center p-2 bg-background/10 rounded">
+                <div className="text-[#00e5a1] font-semibold">5</div>
+                <div className="text-[#94a3b8]">Active Bots</div>
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -34,7 +34,7 @@ const Header: React.FC = () => {
 
   const handleLogin = () => {
     setIsAuthenticated(true);
-    router.push("/bot-dashboard");
+    router.push("/user/dashboard");
   };
 
   // Close mobile menu when navigating to a new page
