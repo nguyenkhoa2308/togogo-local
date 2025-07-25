@@ -27,7 +27,7 @@ export default function RootLayout({
   const isUserPage = pathname.startsWith("/user");
 
   return (
-    <html lang="vi" className="scrollbar-hide">
+    <html lang="vi" className="">
       <body className={inter.className}>
         <AOSProvider>
           {!isBlogPage && !isUserPage && <Header />}
