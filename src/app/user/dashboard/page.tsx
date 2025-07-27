@@ -20,6 +20,7 @@ import {
   BotIcon,
 } from "lucide-react";
 import { ActivityLogDialog } from "./components/dialog/ActivityLogDialog";
+import BotsTable from "./components/tables/BotsTable";
 
 export default function Dashboard() {
   const [showActivityDialog, setShowActivityDialog] = useState(false);
@@ -362,8 +363,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="bg-[#0f172a] rounded-lg border p-6 text-white flex flex-col gap-2 hover:shadow-lg transition-all duration-300 ease-in-out border-[#00e5a114]">
-        <div className="border-b border-[#00e5a114] p-6">
+      {/* <div className="border-b border-[#00e5a114] p-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-3 lg:space-y-0">
             <div className="flex items-center space-x-3">
               <BotIcon className="w-5 h-5 text-[#00e5a1]" />
@@ -613,8 +613,8 @@ export default function Dashboard() {
               </span>
             </div>
           </div>
-        </div>
-      </div>
+        </div> */}
+      <BotsTable />
 
       <ActivityLogDialog
         isOpen={showActivityDialog}
