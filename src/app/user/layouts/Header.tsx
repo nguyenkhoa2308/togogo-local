@@ -84,18 +84,7 @@ export function Header({
             </button>
           )}
 
-          {isMobile && (
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">VN</span>
-              </div>
-              <h1 className="text-white font-semibold text-sm">
-                VN DERIVATIVES
-              </h1>
-            </div>
-          )}
-
-          {!isMobile && (
+          {/* {!isMobile && (
             <div className="relative">
               <div
                 className={`flex items-center border border-gray-600 rounded-lg transition-all duration-300 ${
@@ -166,7 +155,7 @@ export function Header({
                 </div>
               )}
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="flex items-center space-x-4">
@@ -220,7 +209,7 @@ export function Header({
             </button>
             <div className="absolute right-0 w-full h-4 top-full"></div>
             <div className="absolute right-0 mt-2 w-56 bg-gray-800 border border-gray-600 rounded-lg shadow-xl hidden group-hover:block z-[100]">
-              <div className="p-3 border-b border-gray-600">
+              {/* <div className="p-3 border-b border-gray-600">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                     <span className="text-white font-medium">TN</span>
@@ -235,7 +224,7 @@ export function Header({
                     </span>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="p-2">
                 <button className="w-full text-left flex items-center space-x-2 px-3 py-2 text-white hover:bg-gray-700 rounded">
                   <User className="w-4 h-4" />

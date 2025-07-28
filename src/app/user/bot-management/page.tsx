@@ -1,4 +1,3 @@
-// BotManagement.tsx - Full Tailwind CSS UI from scratch, No external UI libs
 "use client";
 
 import { useState } from "react";
@@ -18,8 +17,8 @@ import {
   Activity,
   Star,
   Zap,
-  Filter,
-  RefreshCw,
+  // Filter,
+  // RefreshCw,
   X,
   ChevronDown,
   CheckIcon,
@@ -586,7 +585,7 @@ export default function BotManagement() {
                             <span className="text-xs text-[#94a3b8]">Win:</span>
                             <div className="flex items-center space-x-2">
                               <div className="bg-[#1e293b] rounded-full h-1.5 w-12">
-                                <div
+                             <div
                                   className="bg-[#00e5a1] h-1.5 rounded-full"
                                   style={{ width: `${bot.winRate}%` }}
                                 ></div>
@@ -1039,7 +1038,7 @@ export default function BotManagement() {
           <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Tạo bot mới</h2>
-              <button onClick={() => setShowModal(false)}>
+              <button onClick={() => setShowModal(false)} title="Đóng">
                 <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>

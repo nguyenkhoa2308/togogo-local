@@ -1,24 +1,28 @@
-import { useState, useMemo } from "react";
+"use client";
+
+import { useState, useMemo, useRef, useEffect } from "react";
 import {
   Bot,
   Play,
   Pause,
   Settings,
-  TrendingUp,
-  TrendingDown,
+  // TrendingUp,
+  // TrendingDown,
   AlertTriangle,
   CheckCircle,
   Clock,
   Filter,
   Search,
-  MoreHorizontal,
-  FileText,
-  Shield,
-  ChevronLeft,
-  ChevronRight,
+  // MoreHorizontal,
+  // FileText,
+  // Shield,
+  // ChevronLeft,
+  // ChevronRight,
   ChevronDown,
   CheckIcon,
+  User,
 } from "lucide-react";
+import Pagination from "@/app/user/components/Pagination";
 
 // Extended bot data for pagination testing
 const allBotData = [
@@ -270,9 +274,30 @@ const statusOptions = [
 export default function BotsTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [statusDropdown, setStatusDropdown] = useState(false);
+  const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+  const [perPageDropdownOpen, setPerPageDropdownOpen] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setStatusDropdownOpen(false);
+        setPerPageDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Filter and search logic
   const filteredBots = useMemo(() => {
@@ -298,7 +323,6 @@ export default function BotsTable() {
   // Reset to first page when filters change
   const handleFilterChange = (newFilter: string) => {
     setStatusFilter(newFilter);
-    setStatusDropdown(false);
     setCurrentPage(1);
   };
 
@@ -319,27 +343,6 @@ export default function BotsTable() {
     return options.find((opt) => opt.value === value)?.label || value;
   };
 
-  // Generate page numbers for pagination
-  const getPageNumbers = () => {
-    const pageNumbers = [];
-    const maxVisiblePages = 5;
-
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i);
-      }
-    } else {
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-      for (let i = startPage; i <= endPage; i++) {
-        pageNumbers.push(i);
-      }
-    }
-
-    return pageNumbers;
-  };
-
   // Calculate totals for summary
   const totalContracts = allBotData.reduce(
     (sum, bot) => sum + bot.contracts,
@@ -356,7 +359,7 @@ export default function BotsTable() {
               <h3 className="text-white font-semibold leading-none tracking-tight">
                 Theo dõi bot
               </h3>
-              <p className="text-xs text-[#94a3b8] mt-1">
+              <p className="text-sm text-[#94a3b8] mt-0.5">
                 Theo dõi hiệu suất, trạng thái và quản lý rủi ro của tất cả bot
                 trading
               </p>
@@ -371,7 +374,8 @@ export default function BotsTable() {
         </div>
 
         {/* Search and Filter Controls */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-4">
+        <div className="flex flex-col sm:flex-row gap-4 mt-4" ref={dropdownRef}>
+          {/* Search input giữ nguyên */}
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#94a3b8]" />
             <input
@@ -383,39 +387,37 @@ export default function BotsTable() {
             />
           </div>
 
+          {/* Dropdown trạng thái */}
           <div className="relative">
             <button
-              onClick={() => setStatusDropdown(!statusDropdown)}
+              onClick={() => {
+                setStatusDropdownOpen(!statusDropdownOpen);
+                setPerPageDropdownOpen(false); // đóng dropdown còn lại
+              }}
               className="appearance-none outline-none flex justify-between items-center gap-3 bg-[#0F172A] w-[180px] h-10 text-[#94a3b8] text-sm px-3 py-1.5 rounded-md border border-[#64ffda14] transition-colors"
               title="Chọn trạng thái bot"
             >
-              <div className="truncate">
-                <span className="mr-1">
-                  {getLabelByValue(statusOptions, statusFilter)}
-                </span>
-              </div>
-              <Filter className="w-4 h-4 text-[#94a3b8] pointer-events-none" />
+              <span>{getLabelByValue(statusOptions, statusFilter)}</span>
+              <Filter className="w-4 h-4 text-[#94a3b8]" />
             </button>
 
-            {statusDropdown && (
+            {statusDropdownOpen && (
               <div className="absolute z-10 mt-1 w-full bg-[#0F172A] border border-white/10 rounded-md shadow-lg">
-                {statusOptions.map((option, index) => (
+                {statusOptions.map((option, i) => (
                   <button
-                    key={index}
-                    onClick={() => handleFilterChange(option.value)}
+                    key={i}
+                    onClick={() => {
+                      handleFilterChange(option.value);
+                      setStatusDropdownOpen(false);
+                    }}
                     className={`block text-xs w-full text-left px-3 py-2 hover:bg-white/10 transition-colors ${
                       option.value === statusFilter ? "bg-white/5" : ""
                     }`}
                   >
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-1 text-sm">
-                        {option.label}
-                      </div>
-
-                      {option.value === statusFilter ? (
+                    <div className="flex justify-between items-center text-sm">
+                      {option.label}
+                      {option.value === statusFilter && (
                         <CheckIcon className="w-4 h-4" />
-                      ) : (
-                        ""
                       )}
                     </div>
                   </button>
@@ -424,17 +426,43 @@ export default function BotsTable() {
             )}
           </div>
 
+          {/* Dropdown số dòng mỗi trang */}
           <div className="relative">
-            <select
-              value={itemsPerPage.toString()}
-              onChange={(e) => handleItemsPerPageChange(e.target.value)}
-              className="flex h-10 w-[130px] items-center justify-between rounded-md border border-[#64ffda14] px-3 py-2 text-sm text-[#94a3b8] placeholder:text-[#94a3b8] outline-none appearance-none cursor-pointer"
+            <button
+              onClick={() => {
+                setPerPageDropdownOpen(!perPageDropdownOpen);
+                setStatusDropdownOpen(false); // đóng dropdown còn lại
+              }}
+              className="appearance-none outline-none flex justify-between items-center gap-3 bg-[#0F172A] w-[130px] h-10 text-[#94a3b8] text-sm px-3 py-1.5 rounded-md border border-[#64ffda14] transition-colors"
+              title="Chọn số dòng"
             >
-              <option value="5">5 / trang</option>
-              <option value="10">10 / trang</option>
-              <option value="20">20 / trang</option>
-              <option value="50">50 / trang</option>
-            </select>
+              <span>{itemsPerPage} / trang</span>
+              <ChevronDown className="w-4 h-4 text-[#94a3b8]" />
+            </button>
+
+            {perPageDropdownOpen && (
+              <div className="absolute z-10 mt-1 w-full bg-[#0F172A] border border-white/10 rounded-md shadow-lg">
+                {[5, 10, 20, 50].map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => {
+                      handleItemsPerPageChange(num.toString());
+                      setPerPageDropdownOpen(false);
+                    }}
+                    className={`block text-xs w-full text-left px-3 py-2 hover:bg-white/10 transition-colors ${
+                      itemsPerPage === num ? "bg-white/5" : ""
+                    }`}
+                  >
+                    <div className="flex justify-between items-center text-sm">
+                      {num} / trang
+                      {itemsPerPage === num && (
+                        <CheckIcon className="w-4 h-4" />
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -454,11 +482,11 @@ export default function BotsTable() {
             <thead className="[&_tr]:border-b">
               <tr className="border-b border-[#64ffda14] bg-[#1e293b]/30 transition-colors">
                 <th className="px-4 py-3 text-left align-middle text-[#94a3b8] text-sm">
-                  Tên Bot
+                  Tên Bot & Tài Khoản
                 </th>
-                <th className="px-4 py-3 text-left align-middle text-[#94a3b8] text-sm">
+                {/* <th className="px-4 py-3 text-left align-middle text-[#94a3b8] text-sm">
                   Tài Khoản
-                </th>
+                </th> */}
                 <th className="px-4 py-3 text-left align-middle text-[#94a3b8] text-sm">
                   Chiến Lược
                 </th>
@@ -498,17 +526,25 @@ export default function BotsTable() {
                     key={bot.id}
                     className="border-b border-[#64ffda14]/30 hover:bg-[#334155]/20 transition-colors"
                   >
-                    <td className="px-4 py-3 align-middle break-words w-[220px]">
-                      <div className="flex items-start gap-2">
-                        <Bot className="w-4 h-4 text-[#94a3b8]" />
-                        <span className="text-sm font-medium">{bot.name}</span>
+                    <td className="px-4 py-3 align-middle break-words">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-start gap-2">
+                          <Bot className="w-4 h-4 text-[#94a3b8]" />
+                          <span className="text-sm font-medium">
+                            {bot.name}
+                          </span>
+                        </div>
+                        <span className="py-1 text-[#94a3b8] text-sm font-medium flex items-start gap-2">
+                          <User className="w-4 h-4 text-[#94a3b8]" />
+                          {bot.account}
+                        </span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 align-middle break-words max-w-[150px]">
+                    {/* <td className="px-4 py-3 align-middle break-words max-w-[150px]">
                       <span className="inline-flex items-center rounded-full border border-[#64ffda14] bg-background px-2 py-1 text-xs font-medium text-white">
                         {bot.account}
                       </span>
-                    </td>
+                    </td> */}
                     <td className="px-4 py-3 align-middle text-sm text-[#94a3b8] break-words max-w-[180px]">
                       {bot.strategy}
                     </td>
@@ -600,7 +636,7 @@ export default function BotsTable() {
         </div>
 
         {/* Pagination */}
-        {totalPages > 1 && (
+        {/* {totalPages > 1 && (
           <div className="flex items-center justify-between mt-4">
             <div className="text-sm text-[#94a3b8]">
               Trang {currentPage} / {totalPages}
@@ -659,7 +695,13 @@ export default function BotsTable() {
               </div>
             </nav>
           </div>
-        )}
+        )} */}
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
 
         {/* Summary Footer */}
         <div className="mt-4 pt-4 border-t border-[#64ffda14]">
