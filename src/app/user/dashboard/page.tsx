@@ -20,6 +20,9 @@ import {
   BotIcon,
 } from "lucide-react";
 import { ActivityLogDialog } from "./components/dialog/ActivityLogDialog";
+import BotsTable from "./components/tables/BotsTable";
+import PLChart from "./components/charts/PLChart";
+import PerformanceOverview from "./components/charts/PerformanceOverview";
 
 export default function Dashboard() {
   const [showActivityDialog, setShowActivityDialog] = useState(false);
@@ -84,6 +87,24 @@ export default function Dashboard() {
     },
     {
       id: 3,
+      action: "Khởi động bot",
+      target: "VNINDEX-MOMENTUM",
+      time: "15:30",
+      status: "success" as const,
+      icon: Play,
+      module: "BOT",
+    },
+    {
+      id: 4,
+      action: "Khởi động bot",
+      target: "VNINDEX-MOMENTUM",
+      time: "15:30",
+      status: "success" as const,
+      icon: Play,
+      module: "BOT",
+    },
+    {
+      id: 5,
       action: "Khởi động bot",
       target: "VNINDEX-MOMENTUM",
       time: "15:30",
@@ -209,11 +230,12 @@ export default function Dashboard() {
         </div>
         <div className="flex items-center space-x-3">
           <button className="px-3 py-2 border border-[#00E5A1]/50 bg-[#1e293b]/30 text-[#00E5A1] rounded-md hover:bg-[#00e5a1]/10 text-xs flex items-center cursor-pointer">
-            <Download className="w-4 h-4 mr-2" /> Báo cáo
+            <Download className="w-4 h-4 mr-2" />
+            Tải báo cáo
           </button>
-          <button className="px-3 py-2 bg-[#00E5A1] text-[#0a1529] rounded-md hover:bg-[#00D194] text-[#0A1529] text-xs flex items-center cursor-pointer">
+          {/* <button className="px-3 py-2 bg-[#00E5A1] text-[#0a1529] rounded-md hover:bg-[#00D194] text-[#0A1529] text-xs flex items-center cursor-pointer">
             <Bot className="w-4 h-4 mr-2" /> Tạo bot
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -264,6 +286,9 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2">
+          <PerformanceOverview />
+        </div>
+        <div>
           <div className="bg-[#0f172a] rounded-lg border p-6 text-white flex flex-col gap-6 hover:shadow-lg transition-all duration-300 ease-in-out border-[#00e5a114]">
             <div className="border-b border-[#00e5a114] p-6">
               <div className="flex items-center justify-between">
@@ -273,7 +298,7 @@ export default function Dashboard() {
                     <h3 className="font-semibold text-white">
                       Hoạt động gần đây
                     </h3>
-                    <p className="text-[#94a3b8] text-xs mt-0.5">
+                    <p className="text-[#94a3b8] text-sm mt-0.5">
                       Theo dõi các thao tác trong hệ thống
                     </p>
                   </div>
@@ -325,7 +350,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div>
+        {/* <div>
           <div className="bg-[#0f172a] rounded-lg border p-6 text-white flex flex-col gap-2 hover:shadow-lg transition-all duration-300 ease-in-out border-[#00e5a114]">
             <div className="border-b border-[#00e5a114] p-6">
               <div className="flex items-center space-x-3">
@@ -359,262 +384,12 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
-      <div className="bg-[#0f172a] rounded-lg border p-6 text-white flex flex-col gap-2 hover:shadow-lg transition-all duration-300 ease-in-out border-[#00e5a114]">
-        <div className="border-b border-[#00e5a114] p-6">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-3 lg:space-y-0">
-            <div className="flex items-center space-x-3">
-              <BotIcon className="w-5 h-5 text-[#00e5a1]" />
-              <div>
-                <h3 className="font-semibold text-white">Robot Giao dịch</h3>
-                <p className="text-[#94a3b8] text-xs mt-0.5">
-                  Quản lý các bot đang hoạt động
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-[#00e5a1] rounded-full animate-pulse"></div>
-              <span className="text-[#94a3b8] text-xs">
-                Thị trường mở • 15:42:32 ICT
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="hidden xl:block overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-[#1e293b]/30">
-              <tr>
-                <th className="text-left p-4 text-xs font-medium text-[#94a3b8] uppercase tracking-wide">
-                  #
-                </th>
-                <th className="text-left p-4 text-xs font-medium text-[#94a3b8] uppercase tracking-wide">
-                  Chiến lược
-                </th>
-                <th className="text-left p-4 text-xs font-medium text-[#94a3b8] uppercase tracking-wide">
-                  Mã CK
-                </th>
-                <th className="text-left p-4 text-xs font-medium text-[#94a3b8] uppercase tracking-wide">
-                  Khối lượng
-                </th>
-                <th className="text-left p-4 text-xs font-medium text-[#94a3b8] uppercase tracking-wide">
-                  P&L
-                </th>
-                <th className="text-left p-4 text-xs font-medium text-[#94a3b8] uppercase tracking-wide">
-                  Vị thế
-                </th>
-                <th className="text-left p-4 text-xs font-medium text-[#94a3b8] uppercase tracking-wide">
-                  Rủi ro
-                </th>
-                <th className="text-left p-4 text-xs font-medium text-[#94a3b8] uppercase tracking-wide">
-                  Cập nhật
-                </th>
-                <th className="text-left p-4 text-xs font-medium text-[#94a3b8] uppercase tracking-wide">
-                  Thao tác
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {robots.map((robot, index) => (
-                <tr
-                  key={robot.id}
-                  className="border-b border-[#64ffda14]/30 hover:bg-[#334155]/20 transition-colors"
-                >
-                  <td className="p-4">
-                    <span className="text-white border border-[#64ffda14] text-[10px] rounded-md px-2 py-0.5">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                  </td>
-                  <td className="p-4">
-                    <div>
-                      <div className="font-medium text-white text-xs">
-                        {robot.strategy}
-                      </div>
-                      <span className="bg-[#00e5a1]/10 text-[#00e5a1] border border-[#00e5a1]/20 text-[10px] rounded-md px-2 py-0.5 font-bold">
-                        {robot.status}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <code className="bg-[#1e293b] px-2 py-1 rounded text-[10px] font-mono">
-                      {robot.symbol}
-                    </code>
-                  </td>
-                  <td className="p-4 text-xs font-medium text-white">
-                    {robot.volume}
-                  </td>
-                  <td className="p-4 text-right">
-                    <div>
-                      <div className="text-[#00e5a1] font-semibold text-xs">
-                        ₫{robot.pnl.replace("+", "")}
-                      </div>
-                      <div className="text-[#00e5a1] text-[10px]">
-                        {robot.pnlPercent}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4 text-xs font-medium text-[#ededed]">
-                    {robot.position}
-                  </td>
-                  <td className="p-4">
-                    <div className="flex flex-col items-center justify-center space-y-2">
-                      <span className="text-orange-400 text-xs font-medium">
-                        {robot.risk}/{robot.maxRisk}
-                      </span>
-                      <div className="w-16 bg-[#1e293b] rounded-full h-1.5">
-                        <div
-                          className="bg-orange-400 h-1.5 rounded-full"
-                          style={{
-                            width: `${
-                              (parseFloat(robot.risk.replace("K", "")) /
-                                parseFloat(robot.maxRisk.replace("K", ""))) *
-                              100
-                            }%`,
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4 text-xs text-muted-[#ededed]">
-                    {robot.lastUpdate}
-                  </td>
-                  <td className="p-4">
-                    <div className="flex space-x-2">
-                      <button
-                        className="text-[10px] px-3 h-7 bg-[#ef4444]/60 rounded-md font-bold cursor-pointer"
-                        onClick={() => handleBotAction("stop", robot.strategy)}
-                      >
-                        Dừng
-                      </button>
-                      <button
-                        className="text-[10px] px-3 h-7 bg-[#1e293b]/30 border border-[#1e293b] rounded-md font-bold cursor-pointer"
-                        onClick={() => handleBotAction("edit", robot.strategy)}
-                      >
-                        Sửa
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="xl:hidden p-6 space-y-4">
-          {robots.map((robot, index) => (
-            <div
-              key={robot.id}
-              className="border border-border/50 bg-[##334155]/20"
-            >
-              <div className="p-4">
-                <div className="flex flex-col sm:flex-rowitems-start justify-between mb-3">
-                  <div>
-                    <div className="flex items-center space-x-2 mb-1">
-                      <span className="text-white border border-[#64ffda14] text-[10px] font-bold rounded-md px-2 py-0.5">
-                        #{String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="bg-[#00e5a1]/10 text-[#00e5a1] border border-[#00e5a1]/20 text-[10px] rounded-md px-2 py-0.5 font-bold">
-                        {robot.status}
-                      </span>
-                    </div>
-                    <h4 className="font-semibold text-white text-sm">
-                      {robot.strategy}
-                    </h4>
-                    <code className="text-xs text-[#94a3b8] text-xs">
-                      {robot.symbol}
-                    </code>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#94a3b8] text-sm">P&L</span>
-                    <div className="text-right">
-                      <div className="text-[#00e5a1] font-semibold text-sm">
-                        ₫{robot.pnl.replace("+", "")}
-                      </div>
-                      <div className="text-[#00e5a1] text-xs">
-                        {robot.pnlPercent}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      <PLChart />
 
-                <div className="flex justify-between gap-2 text-sm mb-3">
-                  <div>
-                    <span className="text-[#94a3b8]">Khối lượng</span>
-                    <div className="font-medium text-white text-xs">
-                      {robot.volume}
-                    </div>
-                  </div>
-                  <div>
-                    <span className="text-[#94a3b8] sm:text-right block">
-                      Vị thế
-                    </span>
-                    <div className="font-medium text-white text-xs">
-                      {robot.position}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[#94a3b8] text-sm">Rủi ro</span>
-                  <div className="flex items-center space-x-2 flex-col sm:flex-row">
-                    <span className="text-orange-400 text-xs sm:hidden mb-1">
-                      {robot.risk}/{robot.maxRisk}
-                    </span>
-                    <div className="w-16 bg-[#1e293b] rounded-full h-1.5">
-                      <div
-                        className="bg-orange-400 h-1.5 rounded-full"
-                        style={{
-                          width: `${
-                            (parseFloat(robot.risk.replace("K", "")) /
-                              parseFloat(robot.maxRisk.replace("K", ""))) *
-                            100
-                          }%`,
-                        }}
-                      ></div>
-                    </div>
-                    <span className="text-orange-400 text-xs hidden sm:block">
-                      {robot.risk}/{robot.maxRisk}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex space-x-2">
-                  <button
-                    className="flex-1 text-[10px] px-3 h-7 bg-[#ef4444]/60 rounded-md font-bold cursor-pointer"
-                    onClick={() => handleBotAction("stop", robot.strategy)}
-                  >
-                    Dừng
-                  </button>
-                  <button
-                    className="flex-1 text-[10px] px-3 h-7 bg-[#1e293b]/30 border border-[#1e293b] rounded-md font-bold cursor-pointer"
-                    onClick={() => handleBotAction("edit", robot.strategy)}
-                  >
-                    Sửa
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="border-t border-border p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div className="flex justify-between">
-              <span className="text-[#94a3b8] text-xs">Tổng robot:</span>
-              <span className="font-medium text-white text-xs">5 / 10</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[#94a3b8] text-xs">Đang hoạt động:</span>
-              <span className="font-medium text-[#00e5a1] text-xs">3 bots</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[#94a3b8] text-xs">Tổng P&L:</span>
-              <span className="font-medium text-[#00e5a1] text-xs">
-                +₫9,450,000
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BotsTable />
 
       <ActivityLogDialog
         isOpen={showActivityDialog}

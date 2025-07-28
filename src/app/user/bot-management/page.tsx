@@ -208,7 +208,6 @@ export default function BotManagement() {
 
                 </div>
               )}
-
             />
             <div className="border-t border-[#64ffda14] p-4">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-[#94a3b8] gap-2">
@@ -280,7 +279,6 @@ export default function BotManagement() {
           </div>
         </aside>
       </section>
-
       <BotCreateModal
         visible={showModal}
         onClose={() => setShowModal(false)}

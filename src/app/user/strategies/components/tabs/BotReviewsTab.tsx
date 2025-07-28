@@ -1,5 +1,6 @@
-// BotReviews.tsx - React + Tailwind (No UI library, no sonner)
-import { useState } from "react";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import {
   Star,
   ThumbsUp,
@@ -60,9 +61,9 @@ export default function BotReviewsTab() {
   const [sortBy, setSortBy] = useState("rating");
   const [searchQuery, setSearchQuery] = useState("");
   const [reviewDialog, setReviewDialog] = useState(false);
-  const [selectDropDown, setSelectDropDown] = useState(false);
-  const [statusDropDown, setStatusDropDown] = useState(false);
-  const [sortDropDown, setSortDropDown] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<
+    "status" | "sort" | "select" | null
+  >(null);
   const [selectedBot, setSelectedBot] = useState<string>("vn30-momentum-pro");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedSort, setSelectedSort] = useState("newest");
@@ -73,6 +74,43 @@ export default function BotReviewsTab() {
   );
   const [tab, setTab] = useState<"myreviews" | "community">("myreviews");
   const [usedBotViewMode, setUsedBotViewMode] = useState<ViewMode>("list");
+
+  const statusRef = useRef<HTMLDivElement>(null);
+  const sortRef = useRef<HTMLDivElement>(null);
+  const selectRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+
+      if (
+        openDropdown === "status" &&
+        statusRef.current &&
+        !statusRef.current.contains(target)
+      ) {
+        setOpenDropdown(null);
+      }
+
+      if (
+        openDropdown === "sort" &&
+        sortRef.current &&
+        !sortRef.current.contains(target)
+      ) {
+        setOpenDropdown(null);
+      }
+
+      if (
+        openDropdown === "select" &&
+        selectRef.current &&
+        !selectRef.current.contains(target)
+      ) {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [openDropdown]);
 
   const userBotMetrics = [
     {
@@ -456,19 +494,19 @@ export default function BotReviewsTab() {
     setSelectDropDown(!selectDropDown);
   };
 
-  const handleSelectBot = (bot: typeof selectedBot) => {
-    setSelectedBot(bot);
-    setSelectDropDown(false);
-  };
-
   const handleSelectStatus = (status: string) => {
     setSelectedStatus(status);
-    setStatusDropDown(false);
+    setOpenDropdown(null);
   };
 
   const handleSelectSort = (sort: string) => {
     setSelectedSort(sort);
-    setSortDropDown(false);
+    setOpenDropdown(null);
+  };
+
+  const handleSelectBot = (bot: string) => {
+    setSelectedBot(bot);
+    setOpenDropdown(null);
   };
 
   return (
@@ -534,19 +572,19 @@ export default function BotReviewsTab() {
                   />
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                 </div>
-                <div
-                  className="relative"
-                  tabIndex={0}
-                  onBlur={() => setTimeout(() => setStatusDropDown(false), 100)}
-                >
+                <div className="relative" ref={statusRef}>
                   <button
+                    onClick={() =>
+                      setOpenDropdown(
+                        openDropdown === "status" ? null : "status"
+                      )
+                    }
                     className="h-9 w-full rounded-md border border-gray-700 bg-[#1E293B] text-white text-sm px-3"
-                    onClick={() => setStatusDropDown(!statusDropDown)}
                   >
                     {getLabelByValue(statusOptions, selectedStatus)}
                   </button>
 
-                  {statusDropDown && (
+                  {openDropdown === "status" && (
                     <div className="absolute z-10 mt-1 w-full bg-[#0F172A] border border-white/10 rounded-md shadow-lg">
                       {statusOptions.map((option, index) => (
                         <button
@@ -560,11 +598,8 @@ export default function BotReviewsTab() {
                             <div className="flex items-center gap-1 text-sm">
                               {option.label}
                             </div>
-
-                            {option.value === selectedStatus ? (
+                            {option.value === selectedStatus && (
                               <CheckIcon className="w-4 h-4" />
-                            ) : (
-                              ""
                             )}
                           </div>
                         </button>
@@ -573,19 +608,17 @@ export default function BotReviewsTab() {
                   )}
                 </div>
 
-                <div
-                  className="relative"
-                  tabIndex={0}
-                  onBlur={() => setTimeout(() => setStatusDropDown(false), 100)}
-                >
+                <div className="relative" ref={sortRef}>
                   <button
+                    onClick={() =>
+                      setOpenDropdown(openDropdown === "sort" ? null : "sort")
+                    }
                     className="h-9 w-full rounded-md border border-gray-700 bg-[#1E293B] text-white text-sm px-3"
-                    onClick={() => setSortDropDown(!sortDropDown)}
                   >
                     {getLabelByValue(sortOptions, selectedSort)}
                   </button>
 
-                  {sortDropDown && (
+                  {openDropdown === "sort" && (
                     <div className="absolute z-10 mt-1 w-full bg-[#0F172A] border border-white/10 rounded-md shadow-lg">
                       {sortOptions.map((option, index) => (
                         <button
@@ -599,11 +632,8 @@ export default function BotReviewsTab() {
                             <div className="flex items-center gap-1 text-sm">
                               {option.label}
                             </div>
-
-                            {option.value === selectedSort ? (
+                            {option.value === selectedSort && (
                               <CheckIcon className="w-4 h-4" />
-                            ) : (
-                              ""
                             )}
                           </div>
                         </button>
@@ -742,10 +772,13 @@ export default function BotReviewsTab() {
                   <h3 className="text-lg font-semibold text-white">
                     Reviews từ cộng đồng
                   </h3>
-                  <div className="relative">
+                  <div className="relative" ref={selectRef}>
                     <button
-                      value={selectedBot}
-                      onClick={toggleSelectDropdown}
+                      onClick={() =>
+                        setOpenDropdown(
+                          openDropdown === "select" ? null : "select"
+                        )
+                      }
                       className="appearance-none outline-none flex justify-between items-center gap-3 w-[300px] bg-[#0F172A] text-white text-sm px-3 py-1.5 rounded-md border border-white/10 transition-colors hover:bg-white/10"
                       title="Chọn bot"
                     >
@@ -757,12 +790,12 @@ export default function BotReviewsTab() {
                       </div>
                       <ChevronDown
                         className={`size-4 shrink-0 transition-transform ${
-                          selectDropDown ? "rotate-180" : ""
+                          openDropdown === "select" ? "rotate-180" : ""
                         }`}
                       />
                     </button>
 
-                    {selectDropDown && (
+                    {openDropdown === "select" && (
                       <div className="absolute z-10 mt-1 w-full bg-[#0F172A] border border-white/10 rounded-md shadow-lg">
                         {Object.entries(botReviews).map(([botId, reviews]) => (
                           <button
@@ -775,15 +808,12 @@ export default function BotReviewsTab() {
                             <div className="flex justify-between items-center">
                               <div className="flex items-center gap-1 text-sm">
                                 {botId.toUpperCase()}
-                                <span className="text-xs flex items-center">
+                                <span className="text-xs">
                                   ({reviews.length} reviews)
                                 </span>
                               </div>
-
-                              {botId === selectedBot ? (
+                              {botId === selectedBot && (
                                 <CheckIcon className="w-4 h-4" />
-                              ) : (
-                                ""
                               )}
                             </div>
                           </button>
