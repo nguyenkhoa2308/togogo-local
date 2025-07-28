@@ -4,10 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { SideBar } from "@/app/user/layouts/SideBar";
 import { usePathname } from "next/navigation";
 import { Header } from "@/app/user/layouts/Header";
-// import Dashboard from "./bot-dashboard/page";
-// import BotManagement from "./bot-dashboard/bot-management/page";
-// import StrategiesPage from "./bot-dashboard/strategies/page";
-// import các tab khác nếu có...
+import { Toaster } from "react-hot-toast";
 
 export default function BotDashboardLayout({
   children,
@@ -129,6 +126,18 @@ export default function BotDashboardLayout({
         {/* <main className="flex-1 overflow-auto">{children}</main> */}
         <main className="relative min-h-screen overflow-hidden">
           <div className="relative">{children}</div>
+          <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: "#333",
+              color: "#fff",
+              fontSize: "14px",
+              borderRadius: "8px",
+            },
+          }}
+        />
         </main>
       </div>
     </section>
